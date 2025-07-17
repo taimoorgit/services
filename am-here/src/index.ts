@@ -49,6 +49,7 @@ const fetch = async (request: Request, env: Env): Promise<Response> => {
                 const history = existingHistory ? JSON.parse(existingHistory) : [];
                 history.push([arrivedAt, leftAt]);
                 await env.CACHE.put(historyKey, JSON.stringify(history));
+                await env.CACHE.delete(arrivedAtKey);
                 return jsonResponse(`${body.person} left ${body.location} at ${body.datetime} (arrived at ${arrivedAt})`);
             } else {
                 return jsonResponse(`${body.person} left ${body.location} at ${body.datetime} (has no arrival)`);

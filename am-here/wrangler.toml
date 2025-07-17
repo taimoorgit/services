@@ -4,8 +4,8 @@ compatibility_date = "2024-01-01"
 
 [[kv_namespaces]]
 binding = "CACHE"
-id = "preview_id"
-preview_id = "preview_id"
+id = "420fa87ce1da4481b380ef6e2ede8add"
+preview_id = "420fa87ce1da4481b380ef6e2ede8add"
 
 [env.production]
 name = "am-here"

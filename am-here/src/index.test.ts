@@ -13,6 +13,10 @@ class MockKV {
         this.store.set(key, value);
     }
 
+    async delete(key: string): Promise<void> {
+        this.store.delete(key);
+    }
+
     clear() {
         this.store.clear();
     }
@@ -74,6 +78,10 @@ describe('am-here worker', () => {
         expect(JSON.parse(history!)).toEqual([
             ['2024-01-15T10:00:00Z', '2024-01-15T12:00:00Z']
         ]);
+
+        // Should delete the arrival time after creating history
+        const arrivalTime = await mockEnv.CACHE.get('taimoor-gym-arrive');
+        expect(arrivalTime).toBeNull();
     });
 
     it('should handle multiple visits', async () => {
@@ -97,6 +105,10 @@ describe('am-here worker', () => {
             ['2024-01-14T09:00:00Z', '2024-01-14T11:00:00Z'],
             ['2024-01-15T10:00:00Z', '2024-01-15T12:00:00Z']
         ]);
+
+        // Should delete the arrival time after creating history
+        const arrivalTime = await mockEnv.CACHE.get('taimoor-gym-arrive');
+        expect(arrivalTime).toBeNull();
     });
 
     it('should handle departure without prior arrival', async () => {
