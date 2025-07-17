@@ -17,6 +17,12 @@ class MockKV {
         this.store.delete(key);
     }
 
+    async list(): Promise<{ keys: { name: string }[] }> {
+        return {
+            keys: Array.from(this.store.keys()).map(name => ({ name }))
+        };
+    }
+
     clear() {
         this.store.clear();
     }
@@ -128,6 +134,27 @@ describe('am-here worker', () => {
         // Should not create any history since there was no arrival
         const history = await mockEnv.CACHE.get('taimoor-gym-history');
         expect(history).toBeNull();
+    });
+
+    it('should return all cache data on GET request', async () => {
+        // Add some test data
+        await mockEnv.CACHE.put('taimoor-gym-arrive', '2024-01-15T10:00:00Z');
+        await mockEnv.CACHE.put('taimoor-gym-history', JSON.stringify([
+            ['2024-01-14T09:00:00Z', '2024-01-14T11:00:00Z']
+        ]));
+
+        const request = new Request('https://example.com', {
+            method: 'GET'
+        });
+
+        const response = await worker.fetch(request, mockEnv as any);
+        const result = await response.json() as any;
+
+        expect(response.status).toBe(200);
+        expect(result).toEqual({
+            'taimoor-gym-arrive': '2024-01-15T10:00:00Z',
+            'taimoor-gym-history': [['2024-01-14T09:00:00Z', '2024-01-14T11:00:00Z']]
+        });
     });
 
 });

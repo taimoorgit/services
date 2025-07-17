@@ -23,6 +23,26 @@ const jsonResponse = (message: string, status = 200): Response => {
 };
 
 const fetch = async (request: Request, env: Env): Promise<Response> => {
+    if (request.method === 'GET') {
+        const keys = await env.CACHE.list();
+        const cacheData: Record<string, any> = {};
+
+        for (const key of keys.keys) {
+            const value = await env.CACHE.get(key.name);
+            if (value) {
+                try {
+                    cacheData[key.name] = JSON.parse(value);
+                } catch {
+                    cacheData[key.name] = value;
+                }
+            }
+        }
+
+        return new Response(JSON.stringify(cacheData, null, 2), {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
     try {
         const jsonData = await request.json();
 
