@@ -1,0 +1,22 @@
+name = "am-here"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "preview_id"
+preview_id = "preview_id"
+
+[env.production]
+name = "am-here"
+
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "production_id"
+
+[env.staging]
+name = "am-here-staging"
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = "staging_id"
